@@ -1,10 +1,9 @@
 from __future__ import annotations
 import uuid
 from typing import TYPE_CHECKING
-from sqlalchemy import VARCHAR, ForeignKey, CHAR
+from sqlalchemy import VARCHAR, ForeignKey, CHAR, BIGINT
 from core.database import Base, TimeStampMixin
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DynamicMapped
-from sqlalchemy.dialects.mysql import BIGINT
 
 if TYPE_CHECKING:
     from .product import Product
@@ -50,7 +49,7 @@ class UserProfile(Base, TimeStampMixin):
         single_parent=True,
     )
     id: Mapped[int] = mapped_column(
-        BIGINT(unsigned=True),
+        BIGINT,
         init=False,
         primary_key=True,
         autoincrement=True,

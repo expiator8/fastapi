@@ -9,27 +9,27 @@ from sqlalchemy.orm import (
     sessionmaker,
     Session,
 )
-from sqlalchemy.dialects.mysql import DATETIME
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from fastapi import Depends
 
 
 class TimeStampMixin(MappedAsDataclass):
     created_at: Mapped[datetime] = mapped_column(
-        DATETIME(timezone=True, fsp=6),
+        TIMESTAMP(timezone=True, precision=6),
         init=False,
-        server_default=text("CURRENT_TIMESTAMP(6)"),
+        server_default=text("CURRENT_TIMESTAMP"),
     )
     updated_at: Mapped[datetime | None] = mapped_column(
-        DATETIME(timezone=True, fsp=6),
+        TIMESTAMP(timezone=True, precision=6),
         init=False,
-        server_onupdate=text("CURRENT_TIMESTAMP(6)"),
+        server_onupdate=text("CURRENT_TIMESTAMP"),
     )
 
 
 class Base(MappedAsDataclass, DeclarativeBase): ...
 
 
-SQLALCHEMY_DATABASE_URL = "postgresql://testju:1234@localhost:5432/my_proj_2_psql"
+SQLALCHEMY_DATABASE_URL = "postgresql://root:1234@localhost:5432/mydb"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(
