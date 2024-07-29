@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, ConfigDict, UUID4, EmailStr
 
 class UserBase(BaseModel):
     username: str = Field(description="회원명")
-    email: EmailStr
+    email: EmailStr = Field(description="이메일")
 
 
 class UserCreate(UserBase):
@@ -24,4 +24,20 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    id: UUID4
+    id: UUID4 = Field(description="회원 아이디")
+
+
+class Token(BaseModel):
+    access_token: str
+
+
+class TokenPayload(BaseModel):
+    """JWT Payload 모델"""
+
+    # iss: str = None
+    sub: str = None
+    # aud: str = None
+    exp: int = None
+    # nbf: int = None
+    # iat: int = None
+    # jti: str = None

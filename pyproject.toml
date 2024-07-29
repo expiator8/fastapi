@@ -13,6 +13,13 @@ sqlalchemy = "^2.0.31"
 alembic = "^1.13.2"
 email-validator = "^2.2.0"
 psycopg2-binary = "^2.9.9"
+pyjwt = "^2.8.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-dotenv = "^1.0.1"
+pydantic-settings = "^2.3.4"
+sqltap = "^0.3.11"
+fastapi-debug-toolbar = "^0.6.3"
+tortoise-orm = "^0.21.5"
 
 
 [build-system]

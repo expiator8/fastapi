@@ -1,8 +1,9 @@
-from typing import List, TYPE_CHECKING
 import uuid
+from typing import List, TYPE_CHECKING
 from sqlalchemy import ForeignKey, VARCHAR, CHAR
-from core.database import Base, TimeStampMixin
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from ..database import Base
+from ..utils import TimeStampMixin
 
 if TYPE_CHECKING:
     from .user import User
@@ -15,18 +16,15 @@ class Product(Base, TimeStampMixin):
     name: Mapped[str] = mapped_column(VARCHAR(length=50))
     user_id: Mapped[str] = mapped_column(ForeignKey("user.id"))
     user: Mapped["User"] = relationship(
-        init=False,
         back_populates="products",
     )
     categories: Mapped[List["ProductCategory"]] = relationship(
-        init=False,
         back_populates="product",
     )
     id: Mapped[str] = mapped_column(
         CHAR(36),
-        init=False,
         primary_key=True,
-        default_factory=uuid.uuid4,
+        default=uuid.uuid4,
     )
 
 

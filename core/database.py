@@ -1,35 +1,14 @@
 from typing_extensions import Annotated
-from datetime import datetime
-from sqlalchemy import text, create_engine
-from sqlalchemy.orm import (
-    MappedAsDataclass,
-    DeclarativeBase,
-    Mapped,
-    mapped_column,
-    sessionmaker,
-    Session,
-)
-from sqlalchemy.dialects.postgresql import TIMESTAMP
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
 from fastapi import Depends
+from config import settings
 
 
-class TimeStampMixin(MappedAsDataclass):
-    created_at: Mapped[datetime] = mapped_column(
-        TIMESTAMP(timezone=True, precision=6),
-        init=False,
-        server_default=text("CURRENT_TIMESTAMP"),
-    )
-    updated_at: Mapped[datetime | None] = mapped_column(
-        TIMESTAMP(timezone=True, precision=6),
-        init=False,
-        server_onupdate=text("CURRENT_TIMESTAMP"),
-    )
+class Base(DeclarativeBase): ...
 
 
-class Base(MappedAsDataclass, DeclarativeBase): ...
-
-
-SQLALCHEMY_DATABASE_URL = "postgresql://root:1234@localhost:5432/mydb"
+SQLALCHEMY_DATABASE_URL = settings.database_url
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(

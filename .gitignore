@@ -1,5 +1,5 @@
 scripts
-core/migrations/versions/
+migrations/versions/
 .vscode
 
 # Byte-compiled / optimized / DLL files
