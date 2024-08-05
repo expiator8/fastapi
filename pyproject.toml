@@ -19,7 +19,7 @@ python-dotenv = "^1.0.1"
 pydantic-settings = "^2.3.4"
 sqltap = "^0.3.11"
 fastapi-debug-toolbar = "^0.6.3"
-tortoise-orm = "^0.21.5"
+gunicorn = "^22.0.0"
 
 
 [build-system]
