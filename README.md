@@ -2,6 +2,7 @@
 
 ## 폴더 구조
 
+```bash
 project/
 │
 ├── api/
@@ -38,6 +39,7 @@ project/
 ├── main.py
 ├── poetry.lock
 └── pyproject.toml
+```
 
 ## 역할
 
