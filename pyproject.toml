@@ -17,10 +17,8 @@ pyjwt = "^2.8.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-dotenv = "^1.0.1"
 pydantic-settings = "^2.3.4"
-sqltap = "^0.3.11"
 fastapi-debug-toolbar = "^0.6.3"
 gunicorn = "^22.0.0"
-
 
 [build-system]
 requires = ["poetry-core"]

@@ -9,36 +9,41 @@ project/
 │   └── v1/
 │       ├── models/
 │       │   └── app_name.py
-│       ├── router/
+│       ├── routes/
 │       │   ├── __init__.py
 │       │   └── app_name.py
 │       ├── service/
 │       │   └── app_name.py
 │       └── __init__.py
-│
+│ 
 ├── core
 │   ├── entity/
-│   │   └── __init__.py
-│   │   └── entity_name.py
 │   ├── modules/
 │   ├── repository/
 │   ├── database.py
 │   ├── enums.py.py
 │   └── utils.py
 │
+├── logs/
+│   ├── access.log
+│   └── error.log
+│
 ├── migrations/
 │   ├── versions/
 │   ├── env.py
 │   ├── README
 │   └── script.py.mako
+│
 ├── tests/
 ├── .env
 ├── .gitignore
 ├── alembic.ini
 ├── config.py
+├── LICENSE
 ├── main.py
 ├── poetry.lock
-└── pyproject.toml
+├── pyproject.toml
+└── README.md
 ```
 
 ## 역할
@@ -59,16 +64,19 @@ project/
     - database.py: 데이터베이스 연결 및 세션 관리 설정
     - enums.py:  열거형(enum) 타입 정의
     - utils.py: 유틸리티 함수 정의
-3. migrations/: Alembic 데이터베이스 마이그레이션 파일 관리 디렉토리
+3. logs/
+    - access.log: api access log 저장
+    - error.log: 경고, 에러 log 저장
+4. migrations/: Alembic 데이터베이스 마이그레이션 파일 관리 디렉토리
     - versions/: 버전별 마이그레이션 스크립트 파일 디렉토리
     - env.py: 마이그레이션 설정, 동작 정의
     - README: Alembic 사용법 설명
     - script.py.mako: 마이그레이션 스크립트 생성에 사용되는 템플릿 파일
-4. tests/: 테스트 코드 관리 디렉토리
-5. .env: 환경 변수 관리
-6. .gitignore: Git에 업로드하지 않을 파일 및 디렉토리 명시
-7. alembic.ini: Alembic 기본 설정 파일. 전역 설정 정의. e.g. 데이터베이스 URL
-8. config.py: 프로젝트 설정 정의. e.g. celery
-9. main.py: FastAPI 애플리케이션 실행 파일. 프로젝트에서 사용하는 에플리케이션 라우터 관리
-10. poetry.lock: 패키지 의존성 버전 고정
-11. pyproject.toml: 패키지 빌드 설정 관리
+5. tests/: 테스트 코드 관리 디렉토리
+6. .env: 환경 변수 관리
+7. .gitignore: Git에 업로드하지 않을 파일 및 디렉토리 명시
+8. alembic.ini: Alembic 기본 설정 파일. 전역 설정 정의. e.g. 데이터베이스 URL
+9. config.py: 프로젝트 설정 정의. e.g. celery
+10. main.py: FastAPI 애플리케이션 실행 파일. 프로젝트에서 사용하는 에플리케이션 라우터 관리
+11. poetry.lock: 패키지 의존성 버전 고정
+12. pyproject.toml: 패키지 빌드 설정 관리

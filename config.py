@@ -1,7 +1,9 @@
+import logging
+from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 from fastapi import Request
-import sqltap
+
 
 ENV_PATH = ".env"
 
@@ -14,20 +16,21 @@ class Settings(BaseSettings):
         env_file=ENV_PATH,
         env_file_encoding="utf-8",
         # extra="ignore",
-        # frozen=True,
+        frozen=True,
     )
-
-    API_VERSION: str = "v1"
-
-    # JWT
-    ACCESS_TOKEN_SECRET_KEY: str
-    HASH_ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     # 디버그 모드
     DEBUG: bool = True
 
-    # 데이터베이스 설정
+    # API 버전
+    API_VERSION: str = "v1"
+
+    # JWT Config
+    ACCESS_TOKEN_SECRET_KEY: str
+    HASH_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+
+    # DB Config
     DB_ENGINE: str
     DB_USERNAME: str
     DB_PASSWORD: str
@@ -44,15 +47,51 @@ class Settings(BaseSettings):
             host=self.DB_HOST,
             port=self.DB_PORT,
             database=self.DB_NAME,
-        ).__to_string__(hide_password=False)
+        ).__to_string__(hide_password=not self.DEBUG)
 
-    # # Middleware
-    # async def sqltap_profiler(self, request: Request, call_next):
-    #     profiler = sqltap.start()
-    #     response = await call_next(request)
-    #     stats = profiler.collect()
-    #     request.state.profiler_stats = stats
-    #     return response
-
+    # Logging Config
+    if not DEBUG:
+        LOGGING_CONFIG: dict[str, Any] = {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {
+                "error": {
+                    "format": "%(asctime)s - %(levelname)s - %(message)s",
+                },
+                "access": {
+                    "()": "uvicorn.logging.AccessFormatter",
+                    "fmt": "%(asctime)s - %(levelname)s - %(message)s",
+                },
+            },
+            "handlers": {
+                "error": {
+                    "formatter": "error",
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "filename": "logs/error.log",
+                    "maxBytes": 10485760,
+                    "backupCount": 5,
+                },
+                "access": {
+                    "formatter": "access",
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "filename": "logs/access.log",
+                    "maxBytes": 10485760,
+                    "backupCount": 5,
+                },
+            },
+            "loggers": {
+                "uvicorn.error": {
+                    "handlers": ["error"],
+                    "level": "WARNING",
+                    "propagate": False,
+                },
+                "uvicorn.access": {
+                    "handlers": ["access"],
+                    "level": "INFO",
+                    "propagate": False,
+                },
+            },
+        }
+        logging.config.dictConfig(LOGGING_CONFIG)
 
 settings = Settings()

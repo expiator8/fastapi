@@ -1,5 +1,6 @@
-scripts
+logs/
 migrations/versions/
+scripts/
 .vscode
 
 # Byte-compiled / optimized / DLL files
@@ -26,7 +27,6 @@ celerybeat.pid
 # Environments
 .env
 .venv
-.venv-local
 
 # macOS
 .DS_Store
