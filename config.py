@@ -1,8 +1,8 @@
 import logging
+from datetime import datetime, timezone, timedelta
 from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
-from fastapi import Request
 
 
 ENV_PATH = ".env"
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     )
 
     # 디버그 모드
-    DEBUG: bool = True
+    DEBUG: bool = False
 
     # API 버전
     API_VERSION: str = "v1"
@@ -38,6 +38,8 @@ class Settings(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
+    LOG_MAX_BYTES: int = 10 * 1024 * 1024  # 10MB
+
     @property
     def database_url(self) -> str:
         return URL.create(
@@ -51,16 +53,24 @@ class Settings(BaseSettings):
 
     # Logging Config
     if not DEBUG:
+
+        class CustomFormatter(logging.Formatter):
+            def formatTime(self, record, datefmt=None):
+                # KST (UTC+9) 타임존 정의
+                dt = datetime.fromtimestamp(record.created, tz=timezone(timedelta(hours=9)))
+                return dt.isoformat()
+
         LOGGING_CONFIG: dict[str, Any] = {
             "version": 1,
             "disable_existing_loggers": False,
             "formatters": {
                 "error": {
                     "format": "%(asctime)s - %(levelname)s - %(message)s",
+                    "()": CustomFormatter,
                 },
                 "access": {
-                    "()": "uvicorn.logging.AccessFormatter",
-                    "fmt": "%(asctime)s - %(levelname)s - %(message)s",
+                    "format": "%(asctime)s - %(levelname)s - %(message)s",
+                    "()": CustomFormatter,
                 },
             },
             "handlers": {
@@ -68,14 +78,14 @@ class Settings(BaseSettings):
                     "formatter": "error",
                     "class": "logging.handlers.RotatingFileHandler",
                     "filename": "logs/error.log",
-                    "maxBytes": 10485760,
+                    "maxBytes": LOG_MAX_BYTES,
                     "backupCount": 5,
                 },
                 "access": {
                     "formatter": "access",
                     "class": "logging.handlers.RotatingFileHandler",
                     "filename": "logs/access.log",
-                    "maxBytes": 10485760,
+                    "maxBytes": LOG_MAX_BYTES,
                     "backupCount": 5,
                 },
             },
@@ -93,5 +103,11 @@ class Settings(BaseSettings):
             },
         }
         logging.config.dictConfig(LOGGING_CONFIG)
+
+    # AWS S3
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    AWS_STORAGE_BUCKET_NAME: str
+
 
 settings = Settings()
