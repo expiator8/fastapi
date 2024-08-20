@@ -104,6 +104,12 @@ class Settings(BaseSettings):
         }
         logging.config.dictConfig(LOGGING_CONFIG)
 
+    # CORS 설정
+    CORS_ALLOW_ORIGINS: list = ["*"]
+    CORS_ALLOW_CREDENTIALS: bool = False
+    CORS_ALLOW_METHODS: list = ["*"]
+    CORS_ALLOW_HEADERS: list = ["*"]
+
     # AWS S3
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
